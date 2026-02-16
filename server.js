@@ -1,0 +1,33 @@
+const express = require("express");
+const connectDB = require("./config/db");
+const cors=require("cors");
+
+const corsOptions=require("./config/corsOptions");
+
+const app = express();
+connectDB();
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+const fs = require("fs");
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
+app.use("/users", require("./router/userRoutes"));
+app.use("/uploads", express.static("uploads"));
+app.use("/pickup", require("./router/pickupRoutes"));
+app.use("/pickupHistory", require("./router/pickupHistoryRoutes"));
+app.use("/pickup/update", require("./router/pickupUpdateRoutes"));
+app.use("/pickup/delete", require("./router/pickupDeleteRoutes"));
+
+
+
+
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
+});
+
+// reward_points: { type: Number, default: 0 },
+// created_at: { type: Date, default: Date.now }

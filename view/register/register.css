@@ -1,0 +1,196 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* ===== THEME ===== */
+:root {
+  --eco-green: #1b8f4a;
+  --eco-green-dark: #157a3f;
+  --eco-bg: #f4fbf6;
+  --gray-light: #eef3f0;
+  --border-light: #e3e8e5;
+  --text-dark: #1f2937;
+  --text-muted: #6b7280;
+}
+
+/* ===== PAGE ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e9f7ef, #f6fff8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== BRAND ===== */
+.top-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+
+.eco-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--eco-green);
+  color: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.eco-text {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.eco-text span {
+  color: var(--eco-green);
+}
+
+/* ===== CARD ===== */
+.container {
+  width: 420px;
+  background: #fff;
+  padding: 2.2rem;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== TABS ===== */
+.auth-tabs {
+  display: flex;
+  background: var(--gray-light);
+  border-radius: 16px;
+  padding: 6px;
+  margin-bottom: 2rem;
+}
+
+.auth-tabs button {
+  flex: 1;
+  padding: 0.7rem 0;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: 0.3s;
+}
+
+.auth-tabs button.active {
+  background: #fff;
+  color: var(--eco-green);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* ===== FORMS ===== */
+.form {
+  display: none;
+  animation: fadeUp 0.35s ease;
+}
+
+.form.active {
+  display: block;
+}
+
+/* ===== HEADINGS ===== */
+.form h1 {
+  text-align: center;
+  font-size: 1.9rem;
+  margin-bottom: 0.3rem;
+  color: var(--text-dark);
+}
+
+.subtext {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 1.6rem;
+}
+
+/* ===== INPUTS ===== */
+input,
+select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.9rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  font-size: 0.95rem;
+  background: #fff;
+  transition: 0.25s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--eco-green);
+  box-shadow: 0 0 0 3px rgba(27, 143, 74, 0.15);
+}
+
+.password-box {
+  position: relative;
+}
+
+.password-box input {
+  padding-right: 3rem;
+}
+
+.eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.1rem;
+  user-select: none;
+  opacity: 0.65;
+  transition: 0.2s;
+}
+
+.eye:hover {
+  opacity: 1;
+}
+
+
+
+/* ===== BUTTON ===== */
+button[type="submit"] {
+  width: 100%;
+  margin-top: 0.8rem;
+  padding: 0.9rem;
+  border-radius: 14px;
+  border: none;
+  background: var(--eco-green);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button[type="submit"]:hover {
+  background: var(--eco-green-dark);
+  transform: translateY(-1px);
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

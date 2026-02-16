@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pickup Request</title>
+  <link rel="stylesheet" href="./form.css">
+</head>
+<body>
+
+  <div class="logo-area">
+    <div class="logo-icon">♻</div>
+    <div class="logo-text">ECO<span>Loop</span></div>
+  </div>
+
+  <!-- Back Button -->
+  <button class="back-btn" onclick="window.location.href='../Homepage/hp.html'" id="backBtn">
+    ← Back to Home
+  </button>
+
+  <div class="form-container">
+    <h2 id="formHeading">Create Pickup Request</h2>
+
+    <form id="pickupForm" enctype="multipart/form-data">
+
+      <label>Phone Number</label>
+      <input
+        type="tel"
+        name="phone"
+        placeholder="Enter your phone number"
+        required
+      >
+
+      <label>Waste Type</label>
+      <input
+        type="text"
+        name="waste_type"
+        placeholder="e.g. Mobile, Laptop, Battery"
+        required
+      >
+
+      <label>Estimated Weight (kg)</label>
+      <input
+        type="number"
+        name="estimated_weight"
+        placeholder="Approx weight in kg"
+        required
+      >
+
+      <label>Pickup Address</label>
+      <textarea
+        name="pickup_address"
+        placeholder="Enter complete pickup address"
+        required
+      ></textarea>
+
+      <label>Preferred Date</label>
+      <input
+        type="date"
+        name="preferred_date"
+        required
+      >
+
+      <label>Waste Image</label>
+      <input
+        type="file"
+        name="image"
+        accept=".png,.jpg,.jpeg"
+      >
+
+      <button type="submit" class="submit-btn">Submit Pickup</button>
+    </form>
+  </div>
+
+  <script src="form.js"></script>
+</body>
+</html>

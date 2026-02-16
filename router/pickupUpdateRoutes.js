@@ -1,0 +1,8 @@
+const express = require("express");
+const router = express.Router();
+const upload = require("../middleware/uploadMiddleware");
+const { updatePickup } = require("../controller/pickupUpdateController");
+
+router.put("/:id", upload.single("image"), updatePickup);
+
+module.exports = router;
