@@ -21,6 +21,7 @@ app.use("/pickup", require("./router/pickupRoutes"));
 app.use("/pickupHistory", require("./router/pickupHistoryRoutes"));
 app.use("/pickup/update", require("./router/pickupUpdateRoutes"));
 app.use("/pickup/delete", require("./router/pickupDeleteRoutes"));
+app.use("/userProfile", require("./router/userProfileRoutes"));
 
 
 

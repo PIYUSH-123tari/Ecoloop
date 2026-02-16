@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
   type: String,
   required: true
 },
+photo: {
+  type: String,
+  default: null
+},
   reward_points: { type: Number, default: 0 },
   created_at: { type: Date, default: Date.now }
 });
