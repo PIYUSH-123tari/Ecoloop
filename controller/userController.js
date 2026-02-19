@@ -2,6 +2,18 @@ const User = require("../model/User");
 const {v4:uuidv4}=require('uuid');
 const bcrypt = require("bcrypt"); 
 
+const nodemailer = require("nodemailer");
+
+// Email transporter setup
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "ecoloop229@gmail.com",   // 👈 your gmail
+    pass: "auessmdhdfhsbveb"      // 👈 Gmail App Password (NOT normal password)
+  }
+});
+
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, phone, password, region_Id } = req.body;
@@ -22,6 +34,20 @@ const registerUser = async (req, res) => {
       phone,
       password: hashedPassword,
       region_Id
+    });
+
+     // ✅ SEND EMAIL HERE
+    await transporter.sendMail({
+     from: "ecoloop229@gmail.com",
+      to: email,
+      subject: "Welcome to EcoLoop ♻",
+      text: `Hello ${name},
+
+Thank you for registering with EcoLoop ♻.
+
+Together we make the planet cleaner 🌍
+
+- Team EcoLoop`
     });
 
     res.status(201).json({

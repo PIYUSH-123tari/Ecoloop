@@ -379,3 +379,9 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+

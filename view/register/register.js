@@ -2,7 +2,10 @@
 
 // Regex Validations
 const emailRegex = /^[a-zA-Z0-9._%-]+@gmail\.com$/;
-const phoneRegex = /^\d{10}$/;
+const phoneRegex = /^[6-9]\d{9}$/;
+// ✅ Strong Password Validation (NEW CODE)
+const strongPasswordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
 // Toggle between Login and Sign Up forms
 function toggleForm(formType) {
@@ -37,42 +40,51 @@ document.getElementById("signupTab")?.classList.toggle("active", formType === "s
 
 
 // Handle Login
-document.getElementById("loginForm").addEventListener("submit",async function(e) {
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
   e.preventDefault();
+
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
   // Validate email
   if (!emailRegex.test(email)) {
-    alert("Email must end with @gmail.com");
+    showToast("Email must end with @gmail.com", "error");
     return;
   }
-  const authData={
-    email:email,
-    password:password
-  }
-try {
-  const response = await fetch("http://localhost:5000/users/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(authData)
-  });
 
-  const data = await response.json();
-  alert(data.message);
-  if(response.ok){
-    // ✅ STORE userId on login
-  localStorage.setItem("userId", data.user.userId);
-  localStorage.setItem("userName", data.user.name);
-  localStorage.setItem("region_Id", data.user.region_Id);
-    window.location.href="../Homepage/hp.html";
+  const authData = { email, password };
+
+  try {
+    const response = await fetch("http://localhost:5000/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(authData)
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showToast("Login Successful!", "success");
+
+      localStorage.setItem("userId", data.user.userId);
+      localStorage.setItem("userName", data.user.name);
+      localStorage.setItem("region_Id", data.user.region_Id);
+
+      setTimeout(() => {
+        window.location.href = "../Homepage/hp.html";
+      }, 2000);
+
+    } else {
+      showToast(data.message, "error");
+    }
+
+  } catch (error) {
+    showToast("Error logging in: " + error.message, "error");
   }
-}catch(error){
-  alert("Error logging in: " + error.message);
-}
 });
+
 
 
 // Handle Sign Up
@@ -87,15 +99,37 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
 
   // Validate email
   if (!emailRegex.test(email)) {
-    alert("Email must end with @gmail.com");
+   showToast("Email must end with @gmail.com", "error");
     return;
   }
 
   // Validate phone number
   if (!phoneRegex.test(phone)) {
-    alert("Phone number must be exactly 10 digits");
-    return;
-  }
+  showToast("Enter valid Indian mobile number (10 digits starting with 6-9)", "error");
+  return;
+}
+
+// Prevent all same digits
+if (/^(\d)\1{9}$/.test(phone)) {
+  showToast("Invalid phone number", "error");
+  return;
+}
+
+// Prevent too many repeating digits
+if (/(\d)\1{5,}/.test(phone)) {
+  showToast("Phone number looks invalid", "error");
+  return;
+}
+
+
+  
+
+if (!strongPasswordRegex.test(password)) {
+  showToast("Password is not strong enough!", "error");
+
+  return;
+}
+
 
   const userData = {
     name: name,
@@ -114,21 +148,99 @@ try {
   });
 
   const data = await response.json();
- alert(data.message);
+
   if (response.ok) {
+    showToast("Account Created Successfully!", "success");
     // ✅ STORE userId
   localStorage.setItem("userId", data.user.userId);
 
   // optional: store name/email
   localStorage.setItem("userName", data.user.name);
   localStorage.setItem("region_Id",data.user.region_Id);
+    // ⏳ Wait 3 seconds before redirect
+  setTimeout(() => {
     window.location.href = "../Homepage/hp.html";
+  }, 3000);
   } else {
-    alert(data.message);
+    showToast(data.message, "error");
   }
 }
 catch(error){
-  alert("Error registering user: " + error.message);
+ showToast("Error registering user: " + error.message, "error");
 }
 });
+
+/* ===== LIVE PASSWORD VALIDATION ===== */
+
+const passwordInput = document.getElementById("registerPassword");
+
+passwordInput.addEventListener("input", function () {
+  const value = passwordInput.value;
+
+  const lengthRule = document.getElementById("lengthRule");
+  const upperRule = document.getElementById("upperRule");
+  const lowerRule = document.getElementById("lowerRule");
+  const numberRule = document.getElementById("numberRule");
+  const specialRule = document.getElementById("specialRule");
+
+  // Minimum 8 characters
+  if (value.length >= 8) {
+    lengthRule.classList.add("valid");
+    lengthRule.innerHTML = "✔ At least 8 characters";
+  } else {
+    lengthRule.classList.remove("valid");
+    lengthRule.innerHTML = "❌ At least 8 characters";
+  }
+
+  // Uppercase letter
+  if (/[A-Z]/.test(value)) {
+    upperRule.classList.add("valid");
+    upperRule.innerHTML = "✔ At least 1 uppercase letter";
+  } else {
+    upperRule.classList.remove("valid");
+    upperRule.innerHTML = "❌ At least 1 uppercase letter";
+  }
+
+  // Lowercase letter
+  if (/[a-z]/.test(value)) {
+    lowerRule.classList.add("valid");
+    lowerRule.innerHTML = "✔ At least 1 lowercase letter";
+  } else {
+    lowerRule.classList.remove("valid");
+    lowerRule.innerHTML = "❌ At least 1 lowercase letter";
+  }
+
+  // Number
+  if (/[0-9]/.test(value)) {
+    numberRule.classList.add("valid");
+    numberRule.innerHTML = "✔ At least 1 number";
+  } else {
+    numberRule.classList.remove("valid");
+    numberRule.innerHTML = "❌ At least 1 number";
+  }
+
+  // Special character
+  if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+    specialRule.classList.add("valid");
+    specialRule.innerHTML = "✔ At least 1 special character";
+  } else {
+    specialRule.classList.remove("valid");
+    specialRule.innerHTML = "❌ At least 1 special character";
+  }
+});
+
+
+function showToast(message, type) {
+  const container = document.getElementById("toastContainer");
+
+  const toast = document.createElement("div");
+  toast.classList.add("toast", type);
+  toast.textContent = message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 2500);
+}
 

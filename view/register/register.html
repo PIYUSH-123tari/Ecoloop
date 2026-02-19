@@ -46,6 +46,15 @@
   <input type="password" id="registerPassword" placeholder="Create Password" required>
   <span class="eye" onclick="togglePassword('registerPassword', this)">👁</span>
 </div>
+<div class="password-rules" id="passwordRules">
+  <p id="lengthRule">❌ At least 8 characters</p>
+  <p id="upperRule">❌ At least 1 uppercase letter</p>
+  <p id="lowerRule">❌ At least 1 lowercase letter</p>
+  <p id="numberRule">❌ At least 1 number</p>
+  <p id="specialRule">❌ At least 1 special character</p>
+</div>
+
+
 
           
           <select name="region_Id" id="region_Id">
@@ -56,6 +65,7 @@
         <button type="submit">Sign Up</button>
        
       </form>
+      <div id="toastContainer"></div>
     </div>
   </div>
 
