@@ -23,6 +23,8 @@ app.use("/pickup/update", require("./router/pickupUpdateRoutes"));
 app.use("/pickup/delete", require("./router/pickupDeleteRoutes"));
 app.use("/userProfile", require("./router/userProfileRoutes"));
 
+app.use("/category", require("./router/categoryRoutes"));
+
 
 
 

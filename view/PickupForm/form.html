@@ -23,21 +23,25 @@
 
     <form id="pickupForm" enctype="multipart/form-data">
 
-      <label>Phone Number</label>
+      <label>additional Phone Number</label>
       <input
         type="tel"
-        name="phone"
-        placeholder="Enter your phone number"
-        required
+        name="additional_phone_no"
+        placeholder="Enter your additional phone number"
+        
       >
 
-      <label>Waste Type</label>
-      <input
-        type="text"
-        name="waste_type"
-        placeholder="e.g. Mobile, Laptop, Battery"
-        required
-      >
+      <label>Select Category</label>
+<select name="category" id="categorySelect" required>
+  <option value="">Loading categories...</option>
+</select>
+
+<label>Describe Your E-Waste</label>
+<textarea
+  name="waste_description"
+  placeholder="Describe item condition, quantity, brand, damage etc."
+  required
+></textarea>
 
       <label>Estimated Weight (kg)</label>
       <input
@@ -47,12 +51,21 @@
         required
       >
 
-      <label>Pickup Address</label>
-      <textarea
-        name="pickup_address"
-        placeholder="Enter complete pickup address"
-        required
-      ></textarea>
+   <label>Pickup Address</label>
+
+<div class="address-wrapper">
+  <textarea
+    name="pickup_address"
+    id="pickupAddress"
+    placeholder="Enter complete pickup address OR use options below"
+    required
+  ></textarea>
+
+  <button type="button" id="useLocationBtn" class="location-btn">
+    📍 Use My Location
+  </button>
+</div>
+
 
       <label>Preferred Date</label>
       <input

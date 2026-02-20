@@ -1,33 +1,48 @@
 const PickupRequest = require("../model/PickupRequest");
 const User = require("../model/User");
-const { v4: uuidv4 } = require("uuid");
-
 
 const createPickup = async (req, res) => {
   try {
-    const { userId, region_Id } = req.body;
 
-    // 1️⃣ Validate user
-    const user = await User.findOne({ userId});
+    const {
+      userId,
+      userPhone,
+      category,
+      waste_description,
+      additional_phone_no,
+      estimated_weight,
+      pickup_address,
+      preferred_date
+    } = req.body;
+
+    // 1️⃣ Find user using UUID
+    const user = await User.findOne({ userId });
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     // 2️⃣ Create pickup
     const pickup = new PickupRequest({
-      userId: req.body.userId,
-      region_Id: req.body.region_Id,
-      phone: req.body.phone,
-      waste_type: req.body.waste_type,
-      estimated_weight: req.body.estimated_weight,
-      pickup_address: req.body.pickup_address,
-      preferred_date: req.body.preferred_date,
+      user: user._id,                 // ObjectId reference
+      region_Id: user.region_Id,      // copied from user
+      userPhone: userPhone,
+      additional_phone_no: additional_phone_no || null,
+
+      category: category,             // Category ObjectId
+      waste_description: waste_description,
+
+      estimated_weight,
+      pickup_address,
+      preferred_date,
       image: req.file ? `/uploads/${req.file.filename}` : null
     });
 
     await pickup.save();
 
-    res.status(201).json({ message: "Pickup request created successfully" });
+    res.status(201).json({
+      message: "Pickup request created successfully"
+    });
 
   } catch (err) {
     console.error(err);

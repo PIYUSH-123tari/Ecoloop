@@ -23,26 +23,41 @@ fetch(`http://localhost:5000/pickupHistory/user/${userId}`)
       const card = document.createElement("div");
       card.className = "pickup-card";
 
-      card.innerHTML = `
-        ${pickup.image ? `<img src="http://localhost:5000${pickup.image}" class="pickup-img" />` : ""}
+     card.innerHTML = `
+  ${pickup.image ? `<img src="http://localhost:5000${pickup.image}" />` : ""}
 
-        <p><b>Phone:</b> ${pickup.phone}</p>
-        <p><b>Waste Type:</b> ${pickup.waste_type}</p>
-        <p><b>Estimated Weight:</b> ${pickup.estimated_weight} kg</p>
-        <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
-        <p><b>Preferred Date:</b> ${new Date(pickup.preferred_date).toDateString()}</p>
-        <p><b>Status:</b> <span class="status">${pickup.status}</span></p>
+  <p><b>Created At:</b> ${new Date(pickup.createdAt).toLocaleString()}</p>
 
-        <div class="btn-group">
-          <button class="edit-btn" onclick='editPickup(${JSON.stringify(pickup)})'>
-            ✏ Edit
-          </button>
+  <p><b>User Phone:</b> ${pickup.userPhone}</p>
 
-          <button class="delete-btn" onclick="deletePickup('${pickup.pickupRequest_id}')">
-            🗑 Delete
-          </button>
-        </div>
-      `;
+  <p><b>Additional Phone:</b> ${
+    pickup.additional_phone_no ? pickup.additional_phone_no : "-"
+  }</p>
+
+  <p><b>Category:</b> ${
+    pickup.category ? pickup.category.category_name : "-"
+  }</p>
+
+  <p><b>Waste Description:</b> ${pickup.waste_description}</p>
+
+  <p><b>Estimated Weight:</b> ${pickup.estimated_weight} kg</p>
+
+  <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
+
+  <p><b>Preferred Date:</b> ${new Date(pickup.preferred_date).toDateString()}</p>
+
+  <p><b>Status:</b> <span class="status">${pickup.status}</span></p>
+
+  <div class="btn-group">
+    <button class="edit-btn" onclick='editPickup(${JSON.stringify(pickup)})'>
+      ✏ Edit
+    </button>
+
+    <button class="delete-btn" onclick="deletePickup('${pickup.pickupRequest_id}')">
+      🗑 Delete
+    </button>
+  </div>
+`;
 
       pickupContainer.appendChild(card);
     });

@@ -385,3 +385,43 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
+/* ===== CATEGORY SELECT ===== */
+#categorySelect {
+  width: 100%;
+  padding: 13px 14px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  border: 1.5px solid #dcdcdc;
+  font-size: 0.95rem;
+  background: #fff;
+  transition: 0.25s;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+#categorySelect:focus {
+  outline: none;
+  border-color: #1b8f4a;
+  box-shadow: 0 0 0 3px rgba(27, 143, 74, 0.15);
+}
+
+/* ===== E-WASTE TEXTAREA ===== */
+textarea[name="waste_description"] {
+  resize: vertical;
+  min-height: 90px;
+  max-height: 200px;
+  background: #f7faf8;
+  border: 1.5px solid #dcdcdc;
+  border-radius: 12px;
+  padding: 13px 14px;
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+  transition: 0.25s;
+}
+
+textarea[name="waste_description"]:focus {
+  outline: none;
+  border-color: #1b8f4a;
+  box-shadow: 0 0 0 3px rgba(27, 143, 74, 0.15);
+}

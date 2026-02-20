@@ -2,15 +2,16 @@ const PickupRequest = require("../model/PickupRequest");
 
 const updatePickup = async (req, res) => {
   try {
+
     const updateData = {
-      phone: req.body.phone,
-      waste_type: req.body.waste_type,
+      additional_phone_no: req.body.additional_phone_no || null,
+      category: req.body.category,
+      waste_description: req.body.waste_description,
       estimated_weight: req.body.estimated_weight,
       pickup_address: req.body.pickup_address,
       preferred_date: req.body.preferred_date
     };
 
-    // update image only if user uploads new one
     if (req.file) {
       updateData.image = `/uploads/${req.file.filename}`;
     }

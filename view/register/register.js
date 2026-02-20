@@ -1,4 +1,23 @@
 
+// ✅ LOAD REGIONS FROM BACKEND
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const response = await fetch("http://localhost:5000/users/regions");
+    const regions = await response.json();
+
+    const regionSelect = document.getElementById("region_Id");
+
+    regions.forEach(region => {
+      const option = document.createElement("option");
+      option.value = region._id; // ✅ STORE OBJECTID
+      option.textContent = region.region_name;
+      regionSelect.appendChild(option);
+    });
+
+  } catch (error) {
+    console.error("Error loading regions:", error);
+  }
+});
 
 // Regex Validations
 const emailRegex = /^[a-zA-Z0-9._%-]+@gmail\.com$/;
@@ -70,7 +89,9 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
       localStorage.setItem("userId", data.user.userId);
       localStorage.setItem("userName", data.user.name);
-      localStorage.setItem("region_Id", data.user.region_Id);
+      localStorage.setItem("userPhone", data.user.phone); // ✅ NEW
+    localStorage.setItem("region_Id", data.user.region_Id);
+localStorage.setItem("region_name", data.user.region_name); // ✅ NEW
 
       setTimeout(() => {
         window.location.href = "../Homepage/hp.html";
@@ -149,19 +170,17 @@ try {
 
   const data = await response.json();
 
-  if (response.ok) {
-    showToast("Account Created Successfully!", "success");
-    // ✅ STORE userId
-  localStorage.setItem("userId", data.user.userId);
+ if (response.ok) {
+  showToast("Account Created Successfully! Please Login.", "success");
 
-  // optional: store name/email
-  localStorage.setItem("userName", data.user.name);
-  localStorage.setItem("region_Id",data.user.region_Id);
-    // ⏳ Wait 3 seconds before redirect
+  // Clear form
+  document.getElementById("signupForm").reset();
+
+  // Switch to login form
   setTimeout(() => {
-    window.location.href = "../Homepage/hp.html";
-  }, 3000);
-  } else {
+    toggleForm("login");
+  }, 2000);
+} else {
     showToast(data.message, "error");
   }
 }

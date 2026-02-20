@@ -26,8 +26,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   nameInput.value = user.name || "";
   emailInput.value = user.email || "";
   phoneInput.value = user.phone || "";
-  regionText.value = user.region_Id || "";
-  regionSelect.value = user.region_Id || "";
+ regionText.value = user.region_name || "";
+regionSelect.value = user.region_Id || "";
+
+// ✅ FETCH ALL REGIONS
+const regionRes = await fetch("http://localhost:5000/users/regions");
+const regions = await regionRes.json();
+
+regionSelect.innerHTML = "";
+
+regions.forEach(region => {
+  const option = document.createElement("option");
+  option.value = region._id;
+  option.textContent = region.region_name;
+  regionSelect.appendChild(option);
+});
+
+// ✅ Set selected region AFTER options created
+regionSelect.value = user.region_Id || "";
 
   if (user.photo) {
     document.querySelector(".avatar").src =
@@ -89,12 +105,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       body: formData
     });
 
-    if (res.ok) {
-      alert("Profile Updated Successfully");
-      location.reload(); // reload same page
-    } else {
-      alert("Update Failed");
-    }
+   if (res.ok) {
+
+  const updated = await res.json();  // ✅ get updated user
+
+  localStorage.setItem("region_Id", updated.user.region_Id);
+  localStorage.setItem("region_name", updated.user.region_name);
+
+  alert("Profile Updated Successfully");
+  location.reload();
+
+} else {
+  alert("Update Failed");
+}
 
   });
 

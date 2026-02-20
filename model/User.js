@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema({
   required: true
 },
   region_Id: {
-  type: String,
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Region",
   required: true
 },
 photo: {
