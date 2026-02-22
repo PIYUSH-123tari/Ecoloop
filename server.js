@@ -16,7 +16,7 @@ if (!fs.existsSync("uploads")) {
 }
 
 app.use("/users", require("./router/userRoutes"));
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads",express.static("uploads"));
 app.use("/pickup", require("./router/pickupRoutes"));
 app.use("/pickupHistory", require("./router/pickupHistoryRoutes"));
 app.use("/pickup/update", require("./router/pickupUpdateRoutes"));
