@@ -1,0 +1,123 @@
+const detailContainer = document.getElementById("detailContainer");
+const pickup = JSON.parse(localStorage.getItem("viewPickup"));
+
+if (!pickup) {
+  detailContainer.innerHTML = "<p>No pickup data found.</p>";
+} else {
+  const status = pickup.status;
+
+  if (status === "pending") {
+    renderPending();
+  } else if (status === "assigned") {
+    renderAssigned();
+  } else if (status === "collected") {
+    renderCollected();
+  }
+}
+
+// ── PENDING ───────────────────────────────────────────────────────────────────
+function renderPending() {
+  detailContainer.innerHTML = `
+    <div class="detail-card pending-card">
+      <div class="pending-icon">🌿</div>
+      <h2>Thank you for contacting our EcoLoop Team!</h2>
+      <p class="pending-sub">Your request has been received and is under review.</p>
+      <div class="status-badge pending-badge">Status: PENDING</div>
+
+      <div class="info-section">
+        <h3>Request Summary</h3>
+        <p><b>Category:</b> ${pickup.category ? pickup.category.category_name : "-"}</p>
+        <p><b>Waste Description:</b> ${pickup.waste_description}</p>
+        <p><b>Estimated Weight:</b> ${pickup.estimated_weight} kg</p>
+        <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
+        <p><b>Preferred Date:</b> ${new Date(pickup.preferred_date).toDateString()}</p>
+      </div>
+
+      <p class="pending-note">Our team will assign an agent shortly. Please keep your phone reachable.</p>
+    </div>
+  `;
+}
+
+// ── ASSIGNED ──────────────────────────────────────────────────────────────────
+function renderAssigned() {
+  detailContainer.innerHTML = `<p class="loading-text">Loading assignment details...</p>`;
+
+  fetch(`http://localhost:5000/pickupHistory/assignment/${pickup.pickupRequest_id}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data || data.error) {
+        detailContainer.innerHTML = `<p>Assignment details not found.</p>`;
+        return;
+      }
+
+      const agent = data.agent;
+      // Passport photo served from ADMIN server at port 3500
+      const photoUrl = agent.passport_photo
+        ? `http://localhost:3500/uploads/${agent.passport_photo}`
+        : null;
+
+      detailContainer.innerHTML = `
+        <div class="detail-card assigned-card">
+          <div class="assigned-header">
+            <div class="assigned-icon">📋</div>
+            <h2>Your Request Has Been Assigned!</h2>
+            <div class="status-badge assigned-badge">Status: ASSIGNED</div>
+          </div>
+
+          <div class="agent-section">
+            <h3>Assigned Agent</h3>
+            <div class="agent-profile">
+              ${photoUrl
+                ? `<img src="${photoUrl}" alt="Agent Photo" class="agent-photo" />`
+                : `<div class="agent-photo-placeholder">👤</div>`
+              }
+              <div class="agent-info">
+                <p class="agent-name">${agent.name}</p>
+                <p><b>Phone:</b> ${agent.phone}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h3>Assignment Details</h3>
+            <p><b>Assigned Date:</b> ${new Date(data.assigned_date).toDateString()}</p>
+            <p><b>Assigned Time:</b> ${data.assigned_time}</p>
+          </div>
+
+          <div class="info-section">
+            <h3>Your Request</h3>
+            <p><b>Category:</b> ${pickup.category ? pickup.category.category_name : "-"}</p>
+            <p><b>Waste Description:</b> ${pickup.waste_description}</p>
+            <p><b>Estimated Weight:</b> ${pickup.estimated_weight} kg</p>
+            <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
+          </div>
+        </div>
+      `;
+    })
+    .catch(err => {
+      console.error(err);
+      detailContainer.innerHTML = `<p>Error loading assignment details.</p>`;
+    });
+}
+
+// ── COLLECTED ─────────────────────────────────────────────────────────────────
+function renderCollected() {
+  detailContainer.innerHTML = `
+    <div class="detail-card collected-card">
+      <div class="collected-icon">✅</div>
+      <h2>Pickup Collected Successfully!</h2>
+      <div class="status-badge collected-badge">Status: COLLECTED</div>
+
+      <div class="info-section">
+        <h3>Request Summary</h3>
+        <p><b>Category:</b> ${pickup.category ? pickup.category.category_name : "-"}</p>
+        <p><b>Waste Description:</b> ${pickup.waste_description}</p>
+        <p><b>Estimated Weight:</b> ${pickup.estimated_weight} kg</p>
+        <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
+        <p><b>Preferred Date:</b> ${new Date(pickup.preferred_date).toDateString()}</p>
+      </div>
+
+      <p class="collected-note">🌱 Thank you for contributing to a greener planet! Your reward points have been updated.</p>
+    </div>
+  `;
+}

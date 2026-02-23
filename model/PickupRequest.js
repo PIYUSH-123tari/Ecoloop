@@ -68,7 +68,7 @@ const pickupRequestSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ["pending", "assigned", "collected", "recycled"],
+    enum: ["pending", "assigned", "collected"],
     default: "pending"
   }
 
