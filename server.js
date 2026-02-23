@@ -24,7 +24,7 @@ app.use("/pickup/delete", require("./router/pickupDeleteRoutes"));
 app.use("/userProfile", require("./router/userProfileRoutes"));
 
 app.use("/category", require("./router/categoryRoutes"));
-
+app.use("/reward",         require("./router/rewardRoutes"));
 
 
 

@@ -2,7 +2,7 @@
 
 const PickupRequest = require("../model/PickupRequest");
 const PickupLog     = require("../model/PickupLog");
-const Manager         = require("../model/Manager");
+const Manager       = require("../model/Manager"); // your admin/manager model
 
 const deletePickup = async (req, res) => {
   try {
@@ -12,14 +12,24 @@ const deletePickup = async (req, res) => {
 
     if (!existing) return res.status(404).json({ message: "Pickup not found" });
 
-    // Delete (your original logic unchanged)
+    // 1. Cascade delete Assignment + Collected on Admin server (port 3500)
+    //    Uses the delete-by-pickup route we just added
+    try {
+      await fetch(`http://localhost:3500/api/assignment/delete-by-pickup/${existing._id}`, {
+        method: "DELETE"
+      });
+    } catch (cascadeErr) {
+      console.warn("Could not cascade delete assignment (may not exist):", cascadeErr.message);
+    }
+
+    // 2. Delete the PickupRequest (your original logic)
     await PickupRequest.findOneAndDelete({ pickupRequest_id: req.params.id });
 
-    // Log deletion — use admin_Id string
-    const admin = await Manager.findOne({ region_Id: existing.region_Id });
-    if (admin) {
+    // 3. Log deletion for admin notification
+    const manager = await Manager.findOne({ region_Id: existing.region_Id });
+    if (manager) {
       await PickupLog.create({
-        admin:     admin.admin_Id,   // String like "admin-north-goa"
+        admin:     manager.admin_Id,
         user:      existing.user._id || existing.user,
         requestId: existing._id,
         type:      "delete",

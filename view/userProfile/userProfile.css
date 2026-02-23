@@ -191,6 +191,16 @@ textarea {
   grid-column: span 2;
 }
 
+/* ✅ NEW: Reward Balance field — always read-only styling */
+.reward-input {
+  background: #f0fdf4 !important;
+  border: 1.5px solid #86efac !important;
+  color: #15803d !important;
+  font-weight: 700 !important;
+  cursor: not-allowed;
+  letter-spacing: 0.3px;
+}
+
 /* EDIT BUTTON */
 .edit-row {
   margin-top: 25px;

@@ -10,20 +10,12 @@
 
   <!-- NAVBAR -->
   <header class="topbar">
-      <!-- BACK BUTTON -->
-  <button id="backBtn" class="back-btn">← Back</button>
+    <button id="backBtn" class="back-btn">← Back</button>
     <div class="logo-area">
-    
       <div class="logo-icon">♻</div>
-      <div class="logo-text">Eco<span>Loop</span>
-      </div>
-       
+      <div class="logo-text">Eco<span>Loop</span></div>
     </div>
-
- 
-
     <div class="nav-right">
-      
       <button class="ch-pass">Change Password</button>
     </div>
   </header>
@@ -38,12 +30,9 @@
       <!-- LEFT SIDE -->
       <div class="left-box">
         <img src="https://i.ibb.co/2yq1RjQ/user.png" class="avatar" alt="Profile">
-        <!-- <button class="upload-btn">Upload Photo</button> -->
         <p class="support-text">Supported: JPG, PNG, JPEG</p>
-
         <input type="file" id="photoInput" style="display:none;">
-<button class="upload-btn" id="uploadBtn" style="display:none;">Upload Photo</button>
-
+        <button class="upload-btn" id="uploadBtn" style="display:none;">Upload Photo</button>
       </div>
 
       <!-- RIGHT SIDE -->
@@ -65,32 +54,35 @@
             <input type="tel" placeholder="Enter your phone number">
           </div>
 
-         
+          <div class="form-group">
+            <label>Region</label>
+            <input type="text" id="regionText" placeholder="Region">
+            <select id="regionSelect" style="display:none;"></select>
+          </div>
 
-         <div class="form-group">
-  <label>Region</label>
-
-  <!-- Readonly input (default view mode) -->
-  <input type="text" id="regionText" placeholder="Region">
-
-  <!-- Dropdown (hidden initially) -->
-  <select id="regionSelect" style="display:none;">
-</select>
-</div>
-         
+          <!-- ✅ NEW: Reward Balance — always read-only -->
+          <div class="form-group">
+            <label>Reward Balance (₹)</label>
+            <input
+              type="text"
+              id="rewardBalanceInput"
+              placeholder="₹0.00"
+              readonly
+              class="reward-input"
+            >
+          </div>
 
         </div>
 
-        <!-- ONLY EDIT BUTTON -->
+        <!-- EDIT / SAVE BUTTONS -->
         <div class="edit-row">
-  <button class="edit-btn" id="editBtn">Edit Profile</button>
-  <button class="edit-btn" id="saveBtn" style="display:none;">Save Changes</button>
-</div>
-
+          <button class="edit-btn" id="editBtn">Edit Profile</button>
+          <button class="edit-btn" id="saveBtn" style="display:none;">Save Changes</button>
+        </div>
       </div>
     </div>
   </main>
-<script src="userProfile.js"></script>
 
+  <script src="userProfile.js"></script>
 </body>
 </html>
