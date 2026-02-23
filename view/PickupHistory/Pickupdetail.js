@@ -5,7 +5,6 @@ if (!pickup) {
   detailContainer.innerHTML = "<p>No pickup data found.</p>";
 } else {
   const status = pickup.status;
-
   if (status === "pending") {
     renderPending();
   } else if (status === "assigned") {
@@ -13,6 +12,18 @@ if (!pickup) {
   } else if (status === "collected") {
     renderCollected();
   }
+}
+
+// ── Image Modal ───────────────────────────────────────────────────────────────
+function openModal(src) {
+  const modal = document.getElementById("imgModal");
+  const modalImg = document.getElementById("modalImg");
+  modal.style.display = "flex";
+  modalImg.src = src;
+}
+
+function closeModal() {
+  document.getElementById("imgModal").style.display = "none";
 }
 
 // ── PENDING ───────────────────────────────────────────────────────────────────
@@ -23,7 +34,6 @@ function renderPending() {
       <h2>Thank you for contacting our EcoLoop Team!</h2>
       <p class="pending-sub">Your request has been received and is under review.</p>
       <div class="status-badge pending-badge">Status: PENDING</div>
-
       <div class="info-section">
         <h3>Request Summary</h3>
         <p><b>Category:</b> ${pickup.category ? pickup.category.category_name : "-"}</p>
@@ -32,7 +42,6 @@ function renderPending() {
         <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
         <p><b>Preferred Date:</b> ${new Date(pickup.preferred_date).toDateString()}</p>
       </div>
-
       <p class="pending-note">Our team will assign an agent shortly. Please keep your phone reachable.</p>
     </div>
   `;
@@ -51,9 +60,9 @@ function renderAssigned() {
       }
 
       const agent = data.agent;
-      // Passport photo served from ADMIN server at port 3500
+      // Photo served directly from Admin server at port 3500 (already working)
       const photoUrl = agent.passport_photo
-        ? `http://localhost:3500/uploads/${agent.passport_photo}`
+        ? `http://localhost:3500/${agent.passport_photo.replace(/\\/g, "/")}`
         : null;
 
       detailContainer.innerHTML = `
@@ -68,7 +77,7 @@ function renderAssigned() {
             <h3>Assigned Agent</h3>
             <div class="agent-profile">
               ${photoUrl
-                ? `<img src="${photoUrl}" alt="Agent Photo" class="agent-photo" />`
+                ? `<img src="${photoUrl}" alt="Agent Photo" class="agent-photo" onclick="openModal('${photoUrl}')" title="Click to enlarge" />`
                 : `<div class="agent-photo-placeholder">👤</div>`
               }
               <div class="agent-info">
@@ -92,6 +101,14 @@ function renderAssigned() {
             <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
           </div>
         </div>
+
+        <!-- Image Modal -->
+        <div id="imgModal" class="modal-overlay" onclick="closeModal()">
+          <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <img id="modalImg" src="" alt="Agent Photo" />
+          </div>
+        </div>
       `;
     })
     .catch(err => {
@@ -107,7 +124,6 @@ function renderCollected() {
       <div class="collected-icon">✅</div>
       <h2>Pickup Collected Successfully!</h2>
       <div class="status-badge collected-badge">Status: COLLECTED</div>
-
       <div class="info-section">
         <h3>Request Summary</h3>
         <p><b>Category:</b> ${pickup.category ? pickup.category.category_name : "-"}</p>
@@ -116,7 +132,6 @@ function renderCollected() {
         <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
         <p><b>Preferred Date:</b> ${new Date(pickup.preferred_date).toDateString()}</p>
       </div>
-
       <p class="collected-note">🌱 Thank you for contributing to a greener planet! Your reward points have been updated.</p>
     </div>
   `;

@@ -192,3 +192,73 @@ body {
   border-radius: 8px;
   text-align: left;
 }
+
+/* ── Agent Photo clickable ─────────────────────────────────────────────────── */
+.agent-photo {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.agent-photo:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 14px rgba(21, 101, 192, 0.35);
+}
+
+/* ── Image Modal ───────────────────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-box {
+  position: relative;
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-box img {
+  max-width: 80vw;
+  max-height: 75vh;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.modal-close:hover {
+  background: #b71c1c;
+}

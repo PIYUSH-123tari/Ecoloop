@@ -1,5 +1,6 @@
 const PickupRequest = require("../model/PickupRequest");
 const Assignment = require("../model/Assignment");
+const Agent = require("../model/Agent");
 const User = require("../model/User");
 
 // GET all pickup requests for a user
@@ -37,21 +38,28 @@ const getAssignmentByPickupId = async (req, res) => {
       return res.status(404).json({ error: "Pickup request not found" });
     }
 
-    // Find assignment and populate agent (only passport_photo, NOT adhar_photo)
-    const assignment = await Assignment.findOne({ pickupRequest: pickup._id })
-      .populate("agent", "agent_name agent_phoneNo passport_photo");
+    // Find assignment WITHOUT populate first
+    const assignment = await Assignment.findOne({ pickupRequest: pickup._id });
 
     if (!assignment) {
       return res.status(404).json({ error: "Assignment not found" });
+    }
+
+    // Manually fetch agent using the agent ObjectId
+    // Agent model is shared via same MongoDB — just require it
+    const agent = await Agent.findById(assignment.agent).select("agent_name agent_phoneNo passport_photo");
+
+    if (!agent) {
+      return res.status(404).json({ error: "Agent not found" });
     }
 
     res.status(200).json({
       assigned_date: assignment.assigned_date,
       assigned_time: assignment.assigned_time,
       agent: {
-        name: assignment.agent.agent_name,
-        phone: assignment.agent.agent_phoneNo,
-        passport_photo: assignment.agent.passport_photo  // served from admin port 3500
+        name: agent.agent_name,
+        phone: agent.agent_phoneNo,
+        passport_photo: agent.passport_photo  // filename only — frontend builds URL with port 3500
       }
     });
 
