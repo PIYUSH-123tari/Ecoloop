@@ -118,21 +118,75 @@ function renderAssigned() {
 }
 
 // ── COLLECTED ─────────────────────────────────────────────────────────────────
+// ── COLLECTED ─────────────────────────────────────────────────────────────────
 function renderCollected() {
-  detailContainer.innerHTML = `
-    <div class="detail-card collected-card">
-      <div class="collected-icon">✅</div>
-      <h2>Pickup Collected Successfully!</h2>
-      <div class="status-badge collected-badge">Status: COLLECTED</div>
-      <div class="info-section">
-        <h3>Request Summary</h3>
-        <p><b>Category:</b> ${pickup.category ? pickup.category.category_name : "-"}</p>
-        <p><b>Waste Description:</b> ${pickup.waste_description}</p>
-        <p><b>Estimated Weight:</b> ${pickup.estimated_weight} kg</p>
-        <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
-        <p><b>Preferred Date:</b> ${new Date(pickup.preferred_date).toDateString()}</p>
-      </div>
-      <p class="collected-note">🌱 Thank you for contributing to a greener planet! Your reward points have been updated.</p>
-    </div>
-  `;
+  detailContainer.innerHTML = `<p class="loading-text">Loading collected details...</p>`;
+
+  fetch(`http://localhost:5000/pickupHistory/collected/${pickup.pickupRequest_id}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data || data.error) {
+        detailContainer.innerHTML = `<p>Collected details not found.</p>`;
+        return;
+      }
+
+      const agent = data.agent;
+      const photoUrl = agent.passport_photo
+        ? `http://localhost:3500/${agent.passport_photo.replace(/\\/g, "/")}`
+        : null;
+
+      detailContainer.innerHTML = `
+        <div class="detail-card collected-card">
+          <div class="collected-icon">✅</div>
+          <h2>Pickup Collected Successfully!</h2>
+          <div class="status-badge collected-badge">Status: COLLECTED</div>
+
+          <div class="agent-section">
+            <h3>Collected By</h3>
+            <div class="agent-profile">
+              ${photoUrl
+                ? `<img src="${photoUrl}" alt="Agent Photo" class="agent-photo"
+                    onclick="openModal('${photoUrl}')" title="Click to enlarge" />`
+                : `<div class="agent-photo-placeholder">👤</div>`
+              }
+              <div class="agent-info">
+                <p class="agent-name">${agent.name}</p>
+                <p><b>Phone:</b> ${agent.phone}</p>
+                <p><b>Address:</b> ${agent.address}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h3>Collected Details</h3>
+            <p><b>Category:</b> ${data.category ? data.category.category_name : "-"}</p>
+            <p><b>Product Description:</b> ${data.product_description}</p>
+            <p><b>Actual Weight:</b> ${data.actual_weight} kg</p>
+            <p><b>Received Time:</b> ${new Date(data.received_time).toLocaleString()}</p>
+          </div>
+
+          <div class="info-section">
+            <h3>Your Original Request</h3>
+            <p><b>Waste Description:</b> ${pickup.waste_description}</p>
+            <p><b>Estimated Weight:</b> ${pickup.estimated_weight} kg</p>
+            <p><b>Pickup Address:</b> ${pickup.pickup_address}</p>
+            <p><b>Preferred Date:</b> ${new Date(pickup.preferred_date).toDateString()}</p>
+          </div>
+
+          <p class="collected-note">🌱 Thank you for contributing to a greener planet! Your reward points have been updated.</p>
+        </div>
+
+        <!-- Image Modal -->
+        <div id="imgModal" class="modal-overlay" onclick="closeModal()">
+          <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <img id="modalImg" src="" alt="Agent Photo" />
+          </div>
+        </div>
+      `;
+    })
+    .catch(err => {
+      console.error(err);
+      detailContainer.innerHTML = `<p>Error loading collected details.</p>`;
+    });
 }
