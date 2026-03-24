@@ -7,16 +7,16 @@
   <link rel="stylesheet" href="./form.css">
 </head>
 <body>
-
-  <div class="logo-area">
-    <div class="logo-icon">♻</div>
-    <div class="logo-text">ECO<span>Loop</span></div>
+  <!-- Header with Back Button + Logo -->
+  <div class="form-header">
+    <button class="back-btn" onclick="window.location.href='../Homepage/hp.html'" id="backBtn">
+      ← Back to Home
+    </button>
+    <div class="logo-area">
+      <div class="logo-icon">♻</div>
+      <div class="logo-text">ECO<span>Loop</span></div>
+    </div>
   </div>
-
-  <!-- Back Button -->
-  <button class="back-btn" onclick="window.location.href='../Homepage/hp.html'" id="backBtn">
-    ← Back to Home
-  </button>
 
   <div class="form-container">
     <h2 id="formHeading">Create Pickup Request</h2>
@@ -85,6 +85,7 @@
     </form>
   </div>
 
+  <script src="../authGuard.js"></script>
   <script src="form.js"></script>
 </body>
 </html>

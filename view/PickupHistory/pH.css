@@ -2,11 +2,13 @@ body {
   font-family: Arial, sans-serif;
   background: #f4f6f8;
   padding: 20px;
+  min-height: 100vh;
 }
 
 h2 {
   text-align: center;
   color: #2e7d32;
+  margin-top: 10px;
 }
 
 .back-btn {
@@ -17,6 +19,12 @@ h2 {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  background: #1b5e20;
 }
 
 .pickup-card {
@@ -39,6 +47,8 @@ h2 {
 
 .pickup-card p {
   margin: 6px 0;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .status {
@@ -68,15 +78,18 @@ h2 {
   margin-top: 10px;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .edit-btn,
 .delete-btn {
-  padding: 7px 16px;
+  padding: 8px 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
 }
 
 .edit-btn {
@@ -84,7 +97,49 @@ h2 {
   color: white;
 }
 
+.edit-btn:hover:not(:disabled) {
+  background: #0d47a1;
+  transform: translateY(-1px);
+}
+
 .delete-btn {
   background: #c62828;
   color: white;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background: #b71c1c;
+  transform: translateY(-1px);
+}
+
+/* ===== RESPONSIVE — MOBILE ===== */
+@media (max-width: 600px) {
+  body {
+    padding: 14px;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  .pickup-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .pickup-card p {
+    font-size: 13px;
+  }
+
+  .btn-group {
+    gap: 8px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    flex: 1;
+    text-align: center;
+    padding: 9px 10px;
+    font-size: 13px;
+  }
 }

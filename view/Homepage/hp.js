@@ -1,7 +1,14 @@
 const navLinks = document.getElementById("navLinks");
 const heroButtons = document.getElementById("heroButtons");
+const hamburgerBtn = document.getElementById("hamburgerBtn");
 
-const userId = localStorage.getItem("userId");
+// Hamburger menu toggle
+hamburgerBtn.addEventListener("click", () => {
+  navLinks.classList.toggle("nav-open");
+  hamburgerBtn.classList.toggle("active");
+});
+
+const userId = sessionStorage.getItem("userId");
 
 if (userId) {
 
@@ -26,10 +33,14 @@ if (userId) {
   document.getElementById("logoutBtn").addEventListener("click", async function (e) {
     e.preventDefault();
 
-    localStorage.clear();
+    const token = sessionStorage.getItem("token");
+    sessionStorage.clear();
 
     const response = await fetch("http://localhost:5000/users/logout", {
-      method: "GET"
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
     });
 
     if (response.ok) {

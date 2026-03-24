@@ -262,3 +262,77 @@ body {
 .modal-close:hover {
   background: #b71c1c;
 }
+
+/* ===== RESPONSIVE — MOBILE ===== */
+@media (max-width: 600px) {
+  body {
+    padding: 14px;
+  }
+
+  .detail-card {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .detail-card h2 {
+    font-size: 18px;
+  }
+
+  .detail-card h3 {
+    font-size: 14px;
+  }
+
+  .info-section p {
+    font-size: 13px;
+  }
+
+  .status-badge {
+    font-size: 12px;
+    padding: 5px 14px;
+  }
+
+  .pending-icon,
+  .collected-icon {
+    font-size: 40px;
+  }
+
+  .assigned-icon {
+    font-size: 36px;
+  }
+
+  .agent-profile {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .agent-photo {
+    width: 70px;
+    height: 70px;
+  }
+
+  .agent-photo-placeholder {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+  }
+
+  .agent-name {
+    font-size: 16px;
+  }
+
+  .collected-note {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .pending-note {
+    font-size: 12px;
+  }
+
+  .back-btn {
+    font-size: 13px;
+    padding: 7px 12px;
+  }
+}

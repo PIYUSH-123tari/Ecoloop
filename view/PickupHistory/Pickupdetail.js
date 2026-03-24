@@ -1,5 +1,6 @@
 const detailContainer = document.getElementById("detailContainer");
-const pickup = JSON.parse(localStorage.getItem("viewPickup"));
+const pickup = JSON.parse(sessionStorage.getItem("viewPickup"));
+const token = sessionStorage.getItem("token");
 
 if (!pickup) {
   detailContainer.innerHTML = "<p>No pickup data found.</p>";
@@ -51,7 +52,9 @@ function renderPending() {
 function renderAssigned() {
   detailContainer.innerHTML = `<p class="loading-text">Loading assignment details...</p>`;
 
-  fetch(`http://localhost:5000/pickupHistory/assignment/${pickup.pickupRequest_id}`)
+  fetch(`http://localhost:5000/pickupHistory/assignment/${pickup.pickupRequest_id}`, {
+    headers: { "Authorization": "Bearer " + token }
+  })
     .then(res => res.json())
     .then(data => {
       if (!data || data.error) {
@@ -122,7 +125,9 @@ function renderAssigned() {
 function renderCollected() {
   detailContainer.innerHTML = `<p class="loading-text">Loading collected details...</p>`;
 
-  fetch(`http://localhost:5000/pickupHistory/collected/${pickup.pickupRequest_id}`)
+  fetch(`http://localhost:5000/pickupHistory/collected/${pickup.pickupRequest_id}`, {
+    headers: { "Authorization": "Bearer " + token }
+  })
     .then(res => res.json())
     .then(data => {
       if (!data || data.error) {

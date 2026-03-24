@@ -1,6 +1,8 @@
 const User = require("../model/User");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../middleware/authMiddleware");
 const Region = require("../model/Region"); // ✅ ADDED: Import Region model
 const nodemailer = require("nodemailer");
 
@@ -93,8 +95,16 @@ const loginController = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: findUser.userId },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     return res.status(200).json({
       message: "Login successful",
+      token,
       user: {
         userId: findUser.userId,
         name: findUser.name,

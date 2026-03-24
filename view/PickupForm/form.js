@@ -1,9 +1,10 @@
-const userId = localStorage.getItem("userId");
-const userPhone = localStorage.getItem("userPhone"); // must be stored at login
+const userId = sessionStorage.getItem("userId");
+const userPhone = sessionStorage.getItem("userPhone"); // must be stored at login
+const token = sessionStorage.getItem("token");
 const categorySelect = document.getElementById("categorySelect");
 const imageInput = document.querySelector("input[name='image']");
-const editData = localStorage.getItem("editPickup");
-const editingPickupId = localStorage.getItem("editingPickupId");
+const editData = sessionStorage.getItem("editPickup");
+const editingPickupId = sessionStorage.getItem("editingPickupId");
 
 
 async function loadCategories(selectedId = null) {
@@ -124,6 +125,9 @@ document.getElementById("pickupForm").addEventListener("submit", async (e) => {
   try {
     const res = await fetch(url, {
       method,
+      headers: {
+        "Authorization": "Bearer " + token
+      },
       body: formData
     });
 
@@ -136,8 +140,8 @@ document.getElementById("pickupForm").addEventListener("submit", async (e) => {
 
     alert(data.message);
 
-    localStorage.removeItem("editPickup");
-    localStorage.removeItem("editingPickupId");
+    sessionStorage.removeItem("editPickup");
+    sessionStorage.removeItem("editingPickupId");
     e.target.reset();
     window.location.href = "../PickupHistory/pH.html";
 
@@ -227,5 +231,3 @@ const data = await response.json();
     }
   );
 });
-
-

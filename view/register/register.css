@@ -13,6 +13,8 @@
   --border-light: #e3e8e5;
   --text-dark: #1f2937;
   --text-muted: #6b7280;
+  --error-red: #dc2626;
+  --success-green: #16a34a;
 }
 
 /* ===== PAGE ===== */
@@ -58,11 +60,13 @@ body {
 
 /* ===== CARD ===== */
 .container {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   background: #fff;
   padding: 2.2rem;
   border-radius: 20px;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+  margin: 0 16px;
 }
 
 /* ===== TABS ===== */
@@ -122,7 +126,7 @@ input,
 select {
   width: 100%;
   padding: 0.85rem 1rem;
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.4rem;
   border-radius: 12px;
   border: 1px solid var(--border-light);
   font-size: 0.95rem;
@@ -137,11 +141,21 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(27, 143, 74, 0.15);
 }
 
+/* Error state for inputs */
+input.input-error,
+select.input-error {
+  border-color: var(--error-red);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+/* ===== PASSWORD BOX ===== */
 .password-box {
   position: relative;
+  margin-bottom: 0.4rem;
 }
 
 .password-box input {
+  margin-bottom: 0;
   padding-right: 3rem;
 }
 
@@ -161,7 +175,41 @@ select:focus {
   opacity: 1;
 }
 
+/* ===== INLINE FIELD ERROR ===== */
+.field-error {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--error-red);
+  font-weight: 500;
+  margin-top: 2px;
+  margin-bottom: 6px;
+  padding-left: 4px;
+  animation: fadeUp 0.2s ease;
+}
 
+/* ===== FORM-LEVEL BANNERS (success / server error) ===== */
+.form-error-banner,
+.form-success-banner {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  animation: fadeUp 0.3s ease;
+}
+
+.form-error-banner {
+  background: #fef2f2;
+  color: var(--error-red);
+  border: 1px solid #fca5a5;
+}
+
+.form-success-banner {
+  background: #f0fdf4;
+  color: var(--success-green);
+  border: 1px solid #86efac;
+}
 
 /* ===== BUTTON ===== */
 button[type="submit"] {
@@ -183,76 +231,138 @@ button[type="submit"]:hover {
   transform: translateY(-1px);
 }
 
+/* ===== PASSWORD VALIDATION RULES ===== */
+.password-rules {
+  font-size: 0.85rem;
+  margin-top: 2px;
+  margin-bottom: 10px;
+}
+
+.password-rules p {
+  margin: 3px 0;
+  color: #dc2626;
+  transition: 0.3s;
+}
+
+.password-rules p.valid {
+  color: #16a34a;
+}
+
 /* ===== ANIMATION ===== */
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-/* ===== PASSWORD VALIDATION RULES ===== */
-.password-rules {
-  font-size: 0.85rem;
-  margin-top: -5px;
-  margin-bottom: 10px;
-}
 
-.password-rules p {
-  margin: 3px 0;
-  color: #dc2626; /* red */
-  transition: 0.3s;
-}
-
-.password-rules p.valid {
-  color: #16a34a; /* green */
-}
-
-
-/* ===== TOAST NOTIFICATION ===== */
-#toastContainer {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-
-.toast {
-  min-width: 250px;
-  padding: 14px 18px;
-  margin-bottom: 12px;
-  border-radius: 12px;
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  animation: slideIn 0.4s ease, fadeOut 0.4s ease 3s forwards;
-}
-
-.toast.success {
-  background: #16a34a;
-}
-
-.toast.error {
-  background: #dc2626;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
+/* ===== RESPONSIVE — TABLET ===== */
+@media (max-width: 768px) {
+  body {
+    padding: 16px;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+
+  .container {
+    padding: 1.8rem;
+    border-radius: 16px;
+  }
+
+  .form h1 {
+    font-size: 1.6rem;
+  }
+
+  .subtext {
+    font-size: 0.88rem;
+  }
+
+  .top-brand {
+    margin-bottom: 1rem;
+  }
+
+  .eco-text {
+    font-size: 1.5rem;
   }
 }
 
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-    transform: translateX(50px);
+/* ===== RESPONSIVE — MOBILE ===== */
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+    justify-content: flex-start;
+    padding-top: 24px;
+  }
+
+  .container {
+    padding: 1.4rem;
+    border-radius: 14px;
+    margin: 0 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  .top-brand {
+    margin-bottom: 0.8rem;
+  }
+
+  .eco-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+  }
+
+  .eco-text {
+    font-size: 1.3rem;
+  }
+
+  .auth-tabs {
+    margin-bottom: 1.4rem;
+    padding: 4px;
+  }
+
+  .auth-tabs button {
+    padding: 0.6rem 0;
+    font-size: 0.85rem;
+    border-radius: 10px;
+  }
+
+  .form h1 {
+    font-size: 1.4rem;
+  }
+
+  .subtext {
+    font-size: 0.82rem;
+    margin-bottom: 1.2rem;
+  }
+
+  input,
+  select {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.88rem;
+    border-radius: 10px;
+  }
+
+  .password-rules {
+    font-size: 0.78rem;
+  }
+
+  button[type="submit"] {
+    padding: 0.8rem;
+    font-size: 0.92rem;
+    border-radius: 12px;
+  }
+
+  .field-error {
+    font-size: 0.75rem;
+  }
+
+  .form-error-banner,
+  .form-success-banner {
+    font-size: 0.84rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
   }
 }
