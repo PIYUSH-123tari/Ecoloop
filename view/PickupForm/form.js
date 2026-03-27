@@ -74,10 +74,10 @@ if (editingPickupId) {
   backBtn.style.opacity = "0.5";
   backBtn.style.cursor = "not-allowed";
   backBtn.onclick = null; // disable navigation
-   imageInput.required = false;
+  imageInput.required = false;
 
 }
-else{
+else {
   imageInput.required = true;//for create mode
 }
 
@@ -114,10 +114,11 @@ const url = editingPickupId
 
 const method = editingPickupId ? "PUT" : "POST";
 
-document.getElementById("pickupForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData(e.target);
+async function savePickupRequest(e, isAutoSave = false) {
+  if (e) e.preventDefault();
+  
+  const form = document.getElementById("pickupForm");
+  const formData = new FormData(form);
 
   formData.append("userId", userId);
   formData.append("userPhone", userPhone);
@@ -134,22 +135,32 @@ document.getElementById("pickupForm").addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (!res.ok) {
-      alert(data.message || "Something went wrong");
+      if (!isAutoSave) alert(data.message || "Something went wrong");
       return;
     }
 
-    alert(data.message);
-
-    sessionStorage.removeItem("editPickup");
-    sessionStorage.removeItem("editingPickupId");
-    e.target.reset();
-    window.location.href = "../PickupHistory/pH.html";
+    if (!isAutoSave) {
+      alert(data.message);
+      sessionStorage.removeItem("editPickup");
+      sessionStorage.removeItem("editingPickupId");
+      form.reset();
+      window.location.href = "../PickupHistory/pH.html";
+    }
 
   } catch (err) {
     console.error(err);
-    alert("Server not reachable");
+    if (!isAutoSave) alert("Server not reachable");
   }
-});
+}
+
+document.getElementById("pickupForm").addEventListener("submit", (e) => savePickupRequest(e, false));
+
+// --- Auto-Save Hook ---
+window.onIdleAutoSave = async () => {
+  if (editingPickupId) {
+    await savePickupRequest(null, true);
+  }
+};
 
 const useLocationBtn = document.getElementById("useLocationBtn");
 const pickupAddressField = document.getElementById("pickupAddress");
@@ -178,19 +189,19 @@ useLocationBtn.addEventListener("click", () => {
 
         await new Promise(resolve => setTimeout(resolve, 800));
         const response = await fetch(
-  `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`,
-  {
-    headers: {
-      "Accept": "application/json"
-    }
-  }
-);
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`,
+          {
+            headers: {
+              "Accept": "application/json"
+            }
+          }
+        );
 
-if (!response.ok) {
-  throw new Error("API Error");
-}
+        if (!response.ok) {
+          throw new Error("API Error");
+        }
 
-const data = await response.json();
+        const data = await response.json();
 
         if (data.address) {
           const area =

@@ -16,6 +16,23 @@ window.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error("Error loading regions:", error);
   }
+
+  // ✅ CLEAR LOGIN FORM ON LOAD
+  // This ensures that when user comes to this page (e.g. after logout)
+  // the email and password fields are completely empty.
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.reset();
+  }
+});
+
+// ✅ HANDLE BROWSER BACK/FORWARD CACHE (BFCache)
+// If the browser restores the page from memory, force a reload or clear inputs
+window.addEventListener("pageshow", function (event) {
+  if (event.persisted) {
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) loginForm.reset();
+  }
 });
 
 // ===== IMPROVED EMAIL VALIDATION =====
@@ -117,6 +134,9 @@ function toggleForm(formType) {
     signupForm.classList.add("active");
     loginForm.classList.remove("active");
   }
+
+  // After switching, re-evaluate tab locks
+  updateTabLock();
 }
 
 function togglePassword(inputId, eye) {
@@ -129,6 +149,86 @@ function togglePassword(inputId, eye) {
     eye.textContent = "👁";
   }
 }
+
+// ===== TAB LOCK LOGIC =====
+
+// Track if redirected from signup
+let redirectedFromSignup = false;
+
+// Check if login form has any input
+function isLoginFormDirty() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  return email !== "" || password !== "";
+}
+
+// Check if signup form has any input
+function isSignupFormDirty() {
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const phone = document.getElementById("phoneNo").value.trim();
+  const password = document.getElementById("registerPassword").value;
+  const region = document.getElementById("region_Id").value;
+  return name !== "" || email !== "" || phone !== "" || password !== "" || region !== "";
+}
+
+// Disable a tab visually and functionally
+function disableTab(tabId) {
+  const tab = document.getElementById(tabId);
+  if (!tab) return;
+  tab.disabled = true;
+  tab.style.opacity = "0.4";
+  tab.style.cursor = "not-allowed";
+  tab.style.pointerEvents = "none";
+}
+
+// Enable a tab
+function enableTab(tabId) {
+  const tab = document.getElementById(tabId);
+  if (!tab) return;
+  tab.disabled = false;
+  tab.style.opacity = "";
+  tab.style.cursor = "";
+  tab.style.pointerEvents = "";
+}
+
+// Update tab lock state based on current active form
+function updateTabLock() {
+  const loginActive = document.getElementById("loginForm").classList.contains("active");
+
+  if (loginActive) {
+    if (isLoginFormDirty()) {
+      // User is filling login — disable register tab
+      disableTab("signupTab");
+    } else if (redirectedFromSignup) {
+      // Redirected from signup — keep register tab disabled
+      disableTab("signupTab");
+    } else {
+      enableTab("signupTab");
+    }
+    enableTab("loginTab");
+  } else {
+    // Signup form is active
+    if (isSignupFormDirty()) {
+      // User is filling signup — disable login tab
+      disableTab("loginTab");
+    } else {
+      enableTab("loginTab");
+    }
+    enableTab("signupTab");
+  }
+}
+
+// Listen to all login inputs
+["loginEmail", "loginPassword"].forEach(id => {
+  document.getElementById(id).addEventListener("input", updateTabLock);
+});
+
+// Listen to all signup inputs
+["signupName", "signupEmail", "phoneNo", "registerPassword", "region_Id"].forEach(id => {
+  document.getElementById(id).addEventListener("input", updateTabLock);
+  document.getElementById(id).addEventListener("change", updateTabLock);
+});
 
 // ===== LOGIN =====
 document.getElementById("loginForm").addEventListener("submit", async function (e) {
@@ -179,7 +279,8 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       sessionStorage.setItem("region_name", data.user.region_name);
 
       setTimeout(() => {
-        window.location.href = "../Homepage/hp.html";
+        // Use replace so login page is removed from history (no back button to it)
+        window.location.replace("../Homepage/hp.html");
       }, 2000);
 
     } else {
@@ -263,6 +364,7 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
 
       setTimeout(() => {
         clearFormError("signupForm");
+         redirectedFromSignup = true; 
         toggleForm("login");
       }, 2000);
 
@@ -280,6 +382,10 @@ const passwordInput = document.getElementById("registerPassword");
 
 passwordInput.addEventListener("input", function () {
   const value = passwordInput.value;
+
+  // ✅ Show rules only when user has typed something
+  const rulesDiv = document.getElementById("passwordRules");
+  rulesDiv.style.display = value.length > 0 ? "block" : "none";
 
   const lengthRule = document.getElementById("lengthRule");
   const upperRule = document.getElementById("upperRule");

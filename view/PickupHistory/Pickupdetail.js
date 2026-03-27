@@ -80,9 +80,9 @@ function renderAssigned() {
             <h3>Assigned Agent</h3>
             <div class="agent-profile">
               ${photoUrl
-                ? `<img src="${photoUrl}" alt="Agent Photo" class="agent-photo" onclick="openModal('${photoUrl}')" title="Click to enlarge" />`
-                : `<div class="agent-photo-placeholder">👤</div>`
-              }
+          ? `<img src="${photoUrl}" alt="Agent Photo" class="agent-photo" onclick="openModal('${photoUrl}')" title="Click to enlarge" />`
+          : `<div class="agent-photo-placeholder">👤</div>`
+        }
               <div class="agent-info">
                 <p class="agent-name">${agent.name}</p>
                 <p><b>Phone:</b> ${agent.phone}</p>
@@ -150,10 +150,10 @@ function renderCollected() {
             <h3>Collected By</h3>
             <div class="agent-profile">
               ${photoUrl
-                ? `<img src="${photoUrl}" alt="Agent Photo" class="agent-photo"
+          ? `<img src="${photoUrl}" alt="Agent Photo" class="agent-photo"
                     onclick="openModal('${photoUrl}')" title="Click to enlarge" />`
-                : `<div class="agent-photo-placeholder">👤</div>`
-              }
+          : `<div class="agent-photo-placeholder">👤</div>`
+        }
               <div class="agent-info">
                 <p class="agent-name">${agent.name}</p>
                 <p><b>Phone:</b> ${agent.phone}</p>

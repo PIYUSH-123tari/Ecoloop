@@ -186,9 +186,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     photoInput.click();
   });
 
-  // SAVE CLICK
-  saveBtn.addEventListener("click", async () => {
-
+  // SAVE CLICK & AUTO-SAVE
+  async function saveProfileData(isAutoSave = false) {
     const formData = new FormData();
     formData.append("name", nameInput.value);
     formData.append("email", emailInput.value);
@@ -215,29 +214,42 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       rewardBalanceInput.value = `₹${(updated.user.reward_balance || 0).toFixed(2)}`;
 
-      showAlert({
-        icon: "✔",
-        iconBg: "linear-gradient(135deg,#d1fae5,#a7f3d0)",
-        iconColor: "#1b8f4a",
-        title: "Profile Updated!",
-        message: "Your profile has been updated successfully.",
-        btnText: "OK",
-        btnColor: "#1b8f4a",
-        onClose: () => location.reload()
-      });
-
+      if (!isAutoSave) {
+        showAlert({
+          icon: "✔",
+          iconBg: "linear-gradient(135deg,#d1fae5,#a7f3d0)",
+          iconColor: "#1b8f4a",
+          title: "Profile Updated!",
+          message: "Your profile has been updated successfully.",
+          btnText: "OK",
+          btnColor: "#1b8f4a",
+          onClose: () => location.reload()
+        });
+      }
     } else {
-      showAlert({
-        icon: "✖",
-        iconBg: "linear-gradient(135deg,#fee2e2,#fecaca)",
-        iconColor: "#c62828",
-        title: "Update Failed",
-        message: "Could not update your profile. Please try again.",
-        btnText: "Try Again",
-        btnColor: "#c62828"
-      });
+      if (!isAutoSave) {
+        showAlert({
+          icon: "✖",
+          iconBg: "linear-gradient(135deg,#fee2e2,#fecaca)",
+          iconColor: "#c62828",
+          title: "Update Failed",
+          message: "Could not update your profile. Please try again.",
+          btnText: "Try Again",
+          btnColor: "#c62828"
+        });
+      }
     }
-  });
+  }
+
+  saveBtn.addEventListener("click", () => saveProfileData(false));
+
+  // --- Auto-Save Hook ---
+  window.onIdleAutoSave = async () => {
+    // If saveBtn is not 'none', it means user is in Edit mode
+    if (saveBtn.style.display !== "none") {
+      await saveProfileData(true);
+    }
+  };
 
 });
 

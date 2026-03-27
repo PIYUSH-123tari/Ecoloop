@@ -12,6 +12,32 @@ const userId = sessionStorage.getItem("userId");
 
 if (userId) {
 
+  // ✅ LOGOUT ON BACK BUTTON
+  // Push a dummy state so the back button fires a popstate event, instead of actually leaving.
+  history.pushState(null, null, window.location.href);
+
+  window.addEventListener('popstate', async function(event) {
+    // If popstate fires, the user clicked "Back". We log them out entirely.
+    const token = sessionStorage.getItem("token");
+    sessionStorage.clear();
+
+    try {
+      if (token) {
+        await fetch("http://localhost:5000/users/logout", {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        });
+      }
+    } catch (e) {
+      console.warn("Logout request failed during back navigation", e);
+    }
+
+    // Redirect to login page
+    window.location.replace("../register/register.html");
+  });
+
   // =========================
   // ✅ AFTER LOGIN
   // =========================
@@ -44,7 +70,8 @@ if (userId) {
     });
 
     if (response.ok) {
-      window.location.href = "../register/register.html";
+      // Use replace so home page is removed from history (no forward button back)
+      window.location.replace("../register/register.html");
     }
   });
 
